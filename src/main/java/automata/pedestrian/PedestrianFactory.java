@@ -1,7 +1,7 @@
 package automata.pedestrian;
 
-import automata.CellularAutomaton;
 import geometry._2d.Location;
+import automata.CellularAutomaton;
 
 /**
  * A class for creating different pedestrians for an automaton.

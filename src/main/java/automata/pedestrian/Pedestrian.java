@@ -1,16 +1,15 @@
 package automata.pedestrian;
 
-import automata.CellularAutomaton;
 import geometry._2d.Location;
+import automata.CellularAutomaton;
 import gui.Canvas;
+import statistics.Random;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
-
-import static statistics.Random.random;
 
 /**
  * A pedestrian in the simulation.
@@ -246,7 +245,7 @@ public class Pedestrian {
     }
 
     // choose one movement according to discrete distribution of desirabilities
-    var chosen = random.discrete(movements, TentativeMovement::desirability);
+    var chosen = Random.random.discrete(movements, TentativeMovement::desirability);
     return Optional.of(chosen.location);
   }
 

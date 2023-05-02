@@ -1,7 +1,7 @@
 package automata.floorField;
 
-import automata.scenario.Scenario;
 import geometry._2d.Location;
+import automata.scenario.Scenario;
 
 /**
  * Class for representing a static floor field stored in a matrix of fields.

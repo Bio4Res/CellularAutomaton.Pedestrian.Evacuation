@@ -3,14 +3,14 @@ import automata.CellularAutomatonParameters;
 import automata.Statistics;
 import automata.neighbourhood.MooreNeighbourhood;
 import automata.pedestrian.PedestrianParameters;
+import automata.scenario.examples.RandomScenario;
+import automata.scenario.examples.Supermarket;
 
 import com.github.cliftonlabs.json_simple.Jsoner;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static automata.scenario.examples.RandomScenario.randomScenario;
-import static automata.scenario.examples.Supermarket.supermarket;
 import static statistics.Random.random;
 
 /**
@@ -22,7 +22,7 @@ class Main {
   public static void main(String[] args) {
     random.setSeed();
 
-    var scenario = random.bernoulli(0.75) ? randomScenario() : supermarket();
+    var scenario = random.bernoulli(0.75) ? RandomScenario.randomScenario() : Supermarket.supermarket();
 
     var cellularAutomatonParameters =
         new CellularAutomatonParameters.Builder()
@@ -42,7 +42,7 @@ class Main {
             .crowdRepulsion(random.nextDouble(1.00, 1.50))
             .build();
 
-    var numberOfPedestrians = 50; //random.nextInt(150, 600);
+    var numberOfPedestrians = random.nextInt(150, 600);
     automaton.addPedestriansUniformly(numberOfPedestrians, pedestrianParameters);
 
     automaton.runGUI(); // automaton.run() to run without GUI

@@ -1,8 +1,8 @@
 package automata.scenario.examples;
 
 import automata.floorField.DijkstraStaticFloorFieldWithMooreNeighbourhood;
-import automata.scenario.Scenario;
 import geometry._2d.Rectangle;
+import automata.scenario.Scenario;
 
 
 /**

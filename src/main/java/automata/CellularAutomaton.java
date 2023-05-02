@@ -15,10 +15,11 @@ import java.util.List;
 
 import static statistics.Descriptive.mean;
 import static statistics.Descriptive.median;
-import static statistics.Random.random;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import statistics.Descriptive;
+import statistics.Random;
 
 
 /**
@@ -149,8 +150,8 @@ public class CellularAutomaton {
     assert numberOfPedestrians >= 0 : "addPedestriansUniformly: number of pedestrian cannot be negative";
     var numberOfPedestriansPlaced = 0;
     while (numberOfPedestriansPlaced < numberOfPedestrians) {
-      var row = random.nextInt(getRows());
-      var column = random.nextInt(getColumns());
+      var row = statistics.Random.random.nextInt(getRows());
+      var column = statistics.Random.random.nextInt(getColumns());
 
       if (addPedestrian(row, column, parameters)) {
         numberOfPedestriansPlaced++;
@@ -273,7 +274,7 @@ public class CellularAutomaton {
     // move each pedestrian
     synchronized (inScenarioPedestrians) {
       // in order to process pedestrians in random order
-      random.shuffle(inScenarioPedestrians);
+      Random.random.shuffle(inScenarioPedestrians);
 
       var pedestriansIterator = inScenarioPedestrians.iterator();
       while (pedestriansIterator.hasNext()) {
@@ -415,10 +416,10 @@ public class CellularAutomaton {
       evacuationTimes[i] = pedestrian.getExitTimeSteps() * parameters.secondsPerTimeStep();
       i += 1;
     }
-    double meanSteps = mean(steps);
-    double meanEvacuationTime = mean(evacuationTimes);
-    double medianSteps = median(steps);
-    double medianEvacuationTime = median(evacuationTimes);
+    double meanSteps = Descriptive.mean(steps);
+    double meanEvacuationTime = Descriptive.mean(evacuationTimes);
+    double medianSteps = Descriptive.median(steps);
+    double medianEvacuationTime = Descriptive.median(evacuationTimes);
     int numberOfEvacuees = outOfScenarioPedestrians.size();
     int numberOfNonEvacuees = inScenarioPedestrians.size();
 

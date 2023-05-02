@@ -33,7 +33,7 @@ public class Scenario {
   /**
    * A rectangle comprising whole scenario.
    */
-  protected final Rectangle boundingBox;
+  protected final geometry._2d.Rectangle boundingBox;
 
   /**
    * A cell in scenario can either be blocked, clear or it can be an exit.
@@ -47,11 +47,11 @@ public class Scenario {
   /**
    * Exits are rectangular. Set comprising rectangles corresponding to all exits.
    */
-  protected final Set<Rectangle> exits;
+  protected final Set<geometry._2d.Rectangle> exits;
   /**
    * Blocked regions are rectangular. Set comprising rectangles corresponding to all blocked regions.
    */
-  protected final Set<Rectangle> blocks;
+  protected final Set<geometry._2d.Rectangle> blocks;
   /**
    * Static floor field corresponding to this scenario.
    */
@@ -79,7 +79,7 @@ public class Scenario {
     this.columns = columns;
     this.cellDimension = cellDimension;
 
-    this.boundingBox = new Rectangle(0, 0, rows, columns);
+    this.boundingBox = new geometry._2d.Rectangle(0, 0, rows, columns);
 
     this.cell = new CellStatus[rows][columns];
     for (CellStatus[] row : cell) {
@@ -133,7 +133,7 @@ public class Scenario {
    *
    * @param rectangle rectangle corresponding to blocked region.
    */
-  public void setBlock(Rectangle rectangle) {
+  public void setBlock(geometry._2d.Rectangle rectangle) {
     if (!boundingBox.contains(rectangle)) {
       throw new IllegalArgumentException("setBlock: block is out of bounds of scenario");
     }
@@ -151,7 +151,7 @@ public class Scenario {
    *
    * @return iterable over all rectangles corresponding to blocked regions in scenario.
    */
-  public Iterable<Rectangle> blocks() {
+  public Iterable<geometry._2d.Rectangle> blocks() {
     return blocks;
   }
 
@@ -181,7 +181,7 @@ public class Scenario {
    *
    * @param rectangle rectangle corresponding to exit.
    */
-  public void setExit(Rectangle rectangle) {
+  public void setExit(geometry._2d.Rectangle rectangle) {
     if (!boundingBox.contains(rectangle)) {
       throw new IllegalArgumentException("setExit: exit is out of bounds of scenario");
     }
