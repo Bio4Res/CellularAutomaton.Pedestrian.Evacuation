@@ -4,6 +4,11 @@ import automata.Statistics;
 import automata.neighbourhood.MooreNeighbourhood;
 import automata.pedestrian.PedestrianParameters;
 
+import com.github.cliftonlabs.json_simple.Jsoner;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static automata.scenario.examples.RandomScenario.randomScenario;
 import static automata.scenario.examples.Supermarket.supermarket;
 import static statistics.Random.random;
@@ -37,11 +42,22 @@ class Main {
             .crowdRepulsion(random.nextDouble(1.00, 1.50))
             .build();
 
-    var numberOfPedestrians = random.nextInt(150, 600);
+    var numberOfPedestrians = 50; //random.nextInt(150, 600);
     automaton.addPedestriansUniformly(numberOfPedestrians, pedestrianParameters);
 
     automaton.runGUI(); // automaton.run() to run without GUI
     Statistics statistics = automaton.computeStatistics();
     System.out.println(statistics);
+
+    // write trace to json file
+    var jsonTrace = automaton.jsonTrace();
+    String fileName = "data/traces/trace.json";
+    try (FileWriter fileWriter = new FileWriter(fileName)) {
+      fileWriter.write(Jsoner.prettyPrint(jsonTrace.toJson()));
+      fileWriter.flush();
+      System.out.println(String.format("Trace written to file %s successfully.", fileName));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

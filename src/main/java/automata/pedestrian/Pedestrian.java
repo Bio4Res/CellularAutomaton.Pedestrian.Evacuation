@@ -50,6 +50,10 @@ public class Pedestrian {
    * Automaton where this pedestrian is running.
    */
   protected final CellularAutomaton automaton;
+  /**
+   * Path followed by pedestrian in scenario during simulation.
+   */
+  protected final List<Location> path;
 
   /**
    * A tentative movement consists of a location (where we should move) and a desirability (the higher the
@@ -89,6 +93,8 @@ public class Pedestrian {
     this.parameters = parameters;
     this.automaton = automaton;
     this.numberOfSteps = 0;
+    this.path = new ArrayList<>();
+    this.path.add(new Location(row, column));
   }
 
   /**
@@ -128,6 +134,15 @@ public class Pedestrian {
   }
 
   /**
+   * Path followed by pedestrian in scenario during simulation.
+   *
+   * @return path followed by pedestrian in scenario during simulation.
+   */
+  public List<Location> getPath() {
+    return path;
+  }
+
+  /**
    * Make pedestrian move to cell with coordinates {@code row} and {@code column}.
    *
    * @param row    vertical coordinate of destination cell.
@@ -137,6 +152,7 @@ public class Pedestrian {
     this.row = row;
     this.column = column;
     this.numberOfSteps++;
+    this.path.add(new Location(row, column));
   }
 
   /**
@@ -146,6 +162,13 @@ public class Pedestrian {
    */
   public void moveTo(Location location) {
     moveTo(location.row(), location.column());
+  }
+
+  /**
+   * Make the pedestrian to stay in its current cell.
+   */
+  public void dontMove() {
+    this.path.add(new Location(row, column));
   }
 
   /**

@@ -10,14 +10,16 @@ import gui.Canvas;
 import gui.Frame;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 import static statistics.Descriptive.mean;
 import static statistics.Descriptive.median;
 import static statistics.Random.random;
+
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 
 /**
  * Cellular Automaton for simulating pedestrian evacuation.
@@ -290,6 +292,7 @@ public class CellularAutomaton {
                 if (willBeOccupied(location)) {
                   // new location already taken by another pedestrian. Don't move
                   occupiedNextState[row][column] = true;
+                  pedestrian.dontMove();
                 } else {
                   // move to new location
                   occupiedNextState[location.row()][location.column()] = true;
@@ -418,6 +421,7 @@ public class CellularAutomaton {
     double medianEvacuationTime = median(evacuationTimes);
     int numberOfEvacuees = outOfScenarioPedestrians.size();
     int numberOfNonEvacuees = inScenarioPedestrians.size();
+
     return new Statistics(meanSteps, meanEvacuationTime
         , medianSteps, medianEvacuationTime
         , numberOfEvacuees, numberOfNonEvacuees);
@@ -439,6 +443,69 @@ public class CellularAutomaton {
         pedestrian.paint(canvas, lightBlue, darkBlue);
       }
     }
+  }
+
+  private static JsonObject jsonPedestrian(int id, int domain, int x, int y) {
+    JsonObject pedestrian = new JsonObject();
+    pedestrian.put("id", id);
+
+    JsonObject location = new JsonObject();
+    location.put("domain", domain);
+
+    JsonObject coordinates = new JsonObject();
+    coordinates.put("X", x);
+    coordinates.put("Y", y);
+
+    location.put("coordinates", coordinates);
+    pedestrian.put("location", location);
+
+    return pedestrian;
+  }
+
+  private static JsonObject jsonSnapshot(double timestamp, JsonArray crowd) {
+    JsonObject snapshot = new JsonObject();
+    snapshot.put("timestamp", timestamp);
+    snapshot.put("crowd", crowd);
+    return snapshot;
+  }
+
+  /**
+   * Json representing traces of all pedestrians through the scenario.
+   *
+   * @return Json representing traces of all pedestrians through the scenario.
+   */
+  public JsonObject jsonTrace() {
+    var domain = 0; // todo currently there is only a single domain
+
+    // Create an empty JsonArray for the snapshots
+    JsonArray snapshots = new JsonArray();
+
+    List<Pedestrian> allPedestrians = new ArrayList<>();
+    allPedestrians.addAll(inScenarioPedestrians);
+    allPedestrians.addAll(outOfScenarioPedestrians);
+    allPedestrians.sort(Comparator.comparing(Pedestrian::getIdentifier));
+
+    // Create snapshots
+    for (int t = 0; t < timeSteps; t++) {
+      JsonArray crowd = new JsonArray();
+      for (var pedestrian : allPedestrians) {
+        var path = pedestrian.getPath();
+        if (path.size() > t) {
+          var location = path.get(t);
+          crowd.add(jsonPedestrian(pedestrian.getIdentifier()
+              , domain
+              , location.row()
+              , location.column()));
+        }
+      }
+      snapshots.add(jsonSnapshot(t, crowd));
+    }
+
+    // Create the final JsonObject with the snapshots array
+    JsonObject result = new JsonObject();
+    result.put("snapshots", snapshots);
+
+    return result;
   }
 }
 
