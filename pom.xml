@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>Bio4Res</groupId>
-    <artifactId>Algorithms.Java.CellularAutomaton.Evacuation.Bio4Res</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>es.uma.lcc.caesium</groupId>
+    <artifactId>pedestrian-evacuation-simulator-cellular-automaton</artifactId>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,6 +19,11 @@
             <groupId>com.github.cliftonlabs</groupId>
             <artifactId>json-simple</artifactId>
             <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>es.uma.lcc.caesium</groupId>
+            <artifactId>pedestrian-evacuation-simulator-environment</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

@@ -2,8 +2,8 @@
 
 Pepe Gallardo, 2023
 
-Requires JDK 17 or higher. See `Main` class for an example.
+Requires JDK 17 or higher. See `es.uma.lcc.automaton.Main` class for an example.
 
 ![Random Scenario](images/RandomScenario.png?raw=true "Random Scenario")
 
-![automata.scenario.examples.Supermarket](images/Supermarket.png?raw=true "automata.scenario.examples.Supermarket")
+![es.uma.lcc.automaton.automata.scenario.examples.Supermarket](images/Supermarket.png?raw=true "es.uma.lcc.automaton.automata.scenario.examples.Supermarket")
