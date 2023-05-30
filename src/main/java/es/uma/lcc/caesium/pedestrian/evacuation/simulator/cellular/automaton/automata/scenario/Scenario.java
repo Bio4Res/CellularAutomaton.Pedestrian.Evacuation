@@ -5,6 +5,7 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.geometry._2d.Location;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.geometry._2d.Rectangle;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Domain;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -278,6 +279,33 @@ public class Scenario {
 
     public Scenario build() {
       return new Scenario(rows, columns, cellDimension, buildFloorField);
+    }
+  }
+
+  /**
+   * Class for building a scenario by importing a domain.
+   */
+  public static final class FromDomainBuilder {
+    private final Domain domain;
+    private double cellDimension = 0.5;
+    private Function<Scenario, FloorField> buildFloorField = ManhattanStaticFloorField::of;
+
+    public FromDomainBuilder(Domain domain) {
+      this.domain = domain;
+    }
+
+    public FromDomainBuilder cellDimension(double cellDimension) {
+      this.cellDimension = cellDimension;
+      return this;
+    }
+
+    public FromDomainBuilder floorField(Function<Scenario, FloorField> buildFloorField) {
+      this.buildFloorField = buildFloorField;
+      return this;
+    }
+
+    public Scenario build() {
+      return new DomainImporter(domain, cellDimension, buildFloorField).getScenario();
     }
   }
 }
