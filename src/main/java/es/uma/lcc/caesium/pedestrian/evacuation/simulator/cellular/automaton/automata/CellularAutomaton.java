@@ -442,7 +442,7 @@ public class CellularAutomaton {
     }
   }
 
-  private static JsonObject jsonPedestrian(int id, int domain, int x, int y) {
+  private static JsonObject jsonPedestrian(int id, int domain, int row, int column) {
     JsonObject pedestrian = new JsonObject();
     pedestrian.put("id", id);
 
@@ -450,8 +450,8 @@ public class CellularAutomaton {
     location.put("domain", domain);
 
     JsonObject coordinates = new JsonObject();
-    coordinates.put("X", x);
-    coordinates.put("Y", y);
+    coordinates.put("X", column);
+    coordinates.put("Y", row);
 
     location.put("coordinates", coordinates);
     pedestrian.put("location", location);
