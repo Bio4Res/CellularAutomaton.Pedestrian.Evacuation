@@ -1,7 +1,6 @@
 package es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton;
 
 import com.github.cliftonlabs.json_simple.JsonException;
-import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.CellularAutomaton;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.CellularAutomatonParameters;
@@ -10,11 +9,10 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.neighbourhood.MooreNeighbourhood;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.pedestrian.PedestrianParameters;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.scenario.Scenario;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Domain;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Environment;
-import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.EnvironmentFactory;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -27,13 +25,12 @@ import static es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automa
  */
 public class MainFromDomain {
   public static void main(String[] args) throws FileNotFoundException, JsonException {
-    String filename = (args.length == 0) ? "data/environments/environment-example.json" : args[0];
-    FileReader reader = new FileReader(filename);
-    JsonObject json = (JsonObject) Jsoner.deserialize(reader);
-    Environment environment = EnvironmentFactory.buildFromJSON(json);
+    String filename = (args.length == 0) ? "data/environments/environment-example-supermarket.json" : args[0];
+    Environment environment = Environment.fromFile(filename);
+    Domain domain = environment.getDomain(1);
 
-    Scenario scenario = new Scenario.FromDomainBuilder(environment.getDomain(1))
-        .cellDimension(1.5)
+    Scenario scenario = new Scenario.FromDomainBuilder(domain)
+        .cellDimension(domain.getWidth() / 110)
         .floorField(DijkstraStaticFloorFieldWithMooreNeighbourhood::of)
         .build();
 
@@ -43,7 +40,7 @@ public class MainFromDomain {
             .secondsTimeLimit(60 * 10) // 10 minutes is time limit for simulation
             .neighbourhood(MooreNeighbourhood::of) // use Moore's Neighbourhood for automaton
             .pedestrianVelocity(1.3) // a pedestrian walks at 1.3 m/s
-            .GUITimeFactor(15) // perform GUI animation x15 times faster than real time
+            .GUITimeFactor(8) // perform GUI animation x8 times faster than real time
             .build();
 
     var automaton = new CellularAutomaton(cellularAutomatonParameters);

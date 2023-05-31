@@ -3,8 +3,7 @@ package es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.au
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.floorField.FloorField;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.geometry._2d.Rectangle;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Domain;
-import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Obstacle;
-import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.ObstaclePolygon;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,21 @@ public class DomainImporter {
   protected Scenario scenario;
 
   /**
-   * Checks whether a point intersects with any obstacle in provided list.
-   * @param obstacles list of obstacles.
-   * @param x X coordinate of point.
-   * @param y Y coordinate of point.
-   * @return {@code true} if point intersects with any obstacle.
+   * Checks whether a rectangle intersects with any shape provided in list.
+   * @param shapes list of shapes.
+   * @param bottom vertical bottom coordinate of rectangle.
+   * @param left horizontal left coordinate of rectangle.
+   * @param height height of rectangle.
+   * @param width width of rectangle.
+   * @return {@code true} if rectangle intersects with any shape.
    */
-  static protected boolean intersects(List<? extends Obstacle> obstacles, double x, double y) {
+  static protected boolean intersectsAny(List<? extends Shape> shapes, double bottom, double left,
+                                         double height, double width) {
     var intersects = false;
-    var it = obstacles.iterator();
+    var it = shapes.iterator();
     while(!intersects && it.hasNext()) {
-      intersects = it.next().contains(x, y);
+      var shape = it.next();
+      intersects = shape.intersects(left, bottom, width, height);
     }
     return intersects;
   }
@@ -50,28 +53,31 @@ public class DomainImporter {
     var width = domain.getWidth();
     var height = domain.getHeight();
 
-    var rows = (int) (height / cellDimension);
-    var columns = (int) (width / cellDimension);
+    var rows = (int) Math.ceil(height / cellDimension);
+    var columns = (int) Math.ceil(width / cellDimension);
     scenario = new Scenario(rows, columns, cellDimension, buildStaticFloorField);
 
-    var accesses = new ArrayList<ObstaclePolygon>();
+    var accesses = new ArrayList<Shape>();
     for (var access : domain.getAccesses()) {
-      var polygon = new ObstaclePolygon(access.shape());
-      accesses.add(polygon);
+      accesses.add(access.getShape());
     }
 
-    var obstacles = domain.getObstacles();
+    var obstacles = new ArrayList<Shape>();
+    for (var obstacle : domain.getObstacles()) {
+      obstacles.add(obstacle.getShape());
+    }
 
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        var centerRow = (i + 0.5) * cellDimension;
-        var centerColumn = (j + 0.5) * cellDimension;
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < columns; j++) {
+        var bottom = i * cellDimension;
+        var left = j * cellDimension;
 
         var cell = new Rectangle(i, j, 1, 1);
-        if(DomainImporter.intersects(accesses, centerColumn, centerRow)) {
+
+        if(intersectsAny(accesses, bottom, left, cellDimension, cellDimension)) {
           scenario.setExit(cell);
         }
-        if(DomainImporter.intersects(obstacles, centerColumn, centerRow)) {
+        if(intersectsAny(obstacles, bottom, left, cellDimension, cellDimension)) {
           scenario.setBlock(cell);
         }
       }

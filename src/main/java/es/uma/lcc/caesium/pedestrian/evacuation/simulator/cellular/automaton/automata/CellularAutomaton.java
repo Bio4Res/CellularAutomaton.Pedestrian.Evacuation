@@ -9,6 +9,7 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.scenario.Scenario;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.geometry._2d.Location;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Frame;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.statistics.Descriptive;
 
 import java.awt.*;
@@ -314,9 +315,9 @@ public class CellularAutomaton {
    * Thread for running the simulation.
    */
   private class RunThread extends Thread {
-    final es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas canvas;
+    final Canvas canvas;
 
-    public RunThread(es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas canvas) {
+    public RunThread(Canvas canvas) {
       this.canvas = canvas;
     }
 
@@ -361,17 +362,17 @@ public class CellularAutomaton {
    * @param gui if this parameter is {@code true} the simulation is displayed in a GUI.
    */
   private void run(boolean gui) {
-    es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas canvas = null;
+    Canvas canvas = null;
     if (gui) {
       canvas =
-          new es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas.Builder()
+          new Canvas.Builder()
               .rows(scenario.getRows())
               .columns(scenario.getColumns())
               .pixelsPerCell(10)
               .paint(CellularAutomaton.this::paint)
               .build();
 
-      var frame = new es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Frame(canvas);
+      var frame = new Frame(canvas);
     }
     var thread = new RunThread(canvas);
     thread.start();
