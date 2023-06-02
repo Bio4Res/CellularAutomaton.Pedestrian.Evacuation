@@ -257,21 +257,33 @@ public class Scenario {
     public Builder() {
     }
 
+    /**
+     * @param rows number of rows in this scenario.
+     */
     public Builder rows(int rows) {
       this.rows = rows;
       return this;
     }
 
+    /**
+     * @param columns number of columns in this scenario.
+     */
     public Builder columns(int columns) {
       this.columns = columns;
       return this;
     }
 
+    /**
+     * @param cellDimension Cells are squared. Dimension (in meters) of side of a grid cell in scenario.
+     */
     public Builder cellDimension(double cellDimension) {
       this.cellDimension = cellDimension;
       return this;
     }
 
+    /**
+     * @param buildFloorField static floor field of this scenario.
+     */
     public Builder floorField(Function<Scenario, FloorField> buildFloorField) {
       this.buildFloorField = buildFloorField;
       return this;
@@ -290,15 +302,24 @@ public class Scenario {
     private double cellDimension = 0.5;
     private Function<Scenario, FloorField> buildFloorField = ManhattanStaticFloorField::of;
 
+    /**
+     * @param domain {@link es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Domain} defining scenario.
+     */
     public FromDomainBuilder(Domain domain) {
       this.domain = domain;
     }
 
+    /**
+     * @param cellDimension Cells are squared. Dimension (in meters) of side of a grid cell in scenario.
+     */
     public FromDomainBuilder cellDimension(double cellDimension) {
       this.cellDimension = cellDimension;
       return this;
     }
 
+    /**
+     * @param buildFloorField Static floor field corresponding to this scenario.
+     */
     public FromDomainBuilder floorField(Function<Scenario, FloorField> buildFloorField) {
       this.buildFloorField = buildFloorField;
       return this;

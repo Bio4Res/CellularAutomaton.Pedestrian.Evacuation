@@ -11,6 +11,7 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.function.Supplier;
 
 import static es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.statistics.Random.random;
 
@@ -28,23 +29,24 @@ class Main {
     var cellularAutomatonParameters =
         new CellularAutomatonParameters.Builder()
             .scenario(scenario) // use this scenario
-            .secondsTimeLimit(60 * 10) // 10 minutes is time limit for simulation
+            .timeLimit(10 * 60) // 10 minutes is time limit for simulation
             .neighbourhood(MooreNeighbourhood::of) // use Moore's Neighbourhood for automaton
-            .pedestrianVelocity(1.3) // a pedestrian walks at 1.3 m/s
+            .pedestrianVelocity(1.3) // fastest pedestrians walk at 1.3 m/s
             .GUITimeFactor(8) // perform GUI animation x8 times faster than real time
             .build();
 
     var automaton = new CellularAutomaton(cellularAutomatonParameters);
 
     // place pedestrians
-    var pedestrianParameters =
+    Supplier<PedestrianParameters> pedestrianParametersSupplier = () ->
         new PedestrianParameters.Builder()
-            .fieldAttractionBias(random.nextDouble(0.85, 2.50))
+            .fieldAttractionBias(random.nextDouble(0.65, 2.0))
             .crowdRepulsion(random.nextDouble(1.00, 1.50))
+            .velocityPercent(random.nextDouble(0.3, 1.0))
             .build();
 
     var numberOfPedestrians = random.nextInt(150, 600);
-    automaton.addPedestriansUniformly(numberOfPedestrians, pedestrianParameters);
+    automaton.addPedestriansUniformly(numberOfPedestrians, pedestrianParametersSupplier);
 
     automaton.runGUI(); // automaton.run() to run without GUI
     Statistics statistics = automaton.computeStatistics();

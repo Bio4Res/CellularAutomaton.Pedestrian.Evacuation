@@ -239,15 +239,21 @@ public class Pedestrian {
    * @return {@code Optional.empty} if no move is available or {@code Optional(m)} if move {@code m} was chosen.
    */
   public Optional<Location> chooseMovement() {
-    var movements = computeTransitionDesirabilities();
-    if (movements.isEmpty()) {
-      // cannot make a movement
+    if (random.bernoulli(parameters.velocityPercent())) {
+      // try to move at this step to respect pedestrian speed
+      var movements = computeTransitionDesirabilities();
+      if (movements.isEmpty()) {
+        // cannot make a movement
+        return Optional.empty();
+      }
+
+      // choose one movement according to discrete distribution of desirabilities
+      var chosen = random.discrete(movements, TentativeMovement::desirability);
+      return Optional.of(chosen.location);
+    } else {
+      // do not move at this step to respect pedestrian speed
       return Optional.empty();
     }
-
-    // choose one movement according to discrete distribution of desirabilities
-    var chosen = random.discrete(movements, TentativeMovement::desirability);
-    return Optional.of(chosen.location);
   }
 
   /**
@@ -259,7 +265,10 @@ public class Pedestrian {
    */
   public void paint(Canvas canvas, Color fillColor, Color outlineColor) {
     var graphics2D = canvas.graphics2D();
-    graphics2D.setColor(fillColor);
+    var r = (int) (fillColor.getRed() * parameters.velocityPercent());
+    var g = (int) (fillColor.getGreen() * parameters.velocityPercent());
+    var b = (int) (fillColor.getBlue() * parameters.velocityPercent());
+    graphics2D.setColor(new Color(r, g, b));
     graphics2D.fillOval(column, row, 1, 1);
     graphics2D.setColor(outlineColor);
     graphics2D.drawOval(column, row, 1, 1);

@@ -15,6 +15,7 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.sta
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.statistics.Random.random;
 
@@ -151,6 +152,25 @@ public class CellularAutomaton {
       var column = random.nextInt(getColumns());
 
       if (addPedestrian(row, column, parameters)) {
+        numberOfPedestriansPlaced++;
+      }
+    }
+  }
+
+  /**
+   * Adds a given number of new pedestrians located uniform randomly among free cells in automaton's scenario.
+   *
+   * @param numberOfPedestrians number of new pedestrian to add.
+   * @param parametersSupplier  a supplier providing parameters describing each new pedestrians.
+   */
+  public void addPedestriansUniformly(int numberOfPedestrians, Supplier<PedestrianParameters> parametersSupplier) {
+    assert numberOfPedestrians >= 0 : "addPedestriansUniformly: number of pedestrian cannot be negative";
+    var numberOfPedestriansPlaced = 0;
+    while (numberOfPedestriansPlaced < numberOfPedestrians) {
+      var row = random.nextInt(getRows());
+      var column = random.nextInt(getColumns());
+
+      if (addPedestrian(row, column, parametersSupplier.get())) {
         numberOfPedestriansPlaced++;
       }
     }
@@ -324,7 +344,7 @@ public class CellularAutomaton {
     public void run() {
       scenario.getStaticFloorField().initialize();
       timeSteps = 0;
-      var maximalTimeSteps = parameters.secondsTimeLimit() / parameters.secondsPerTimeStep();
+      var maximalTimeSteps = parameters.timeLimit() / parameters.timePerTick();
 
       if (canvas != null) {
         // show initial configuration for 1.5 seconds
@@ -343,7 +363,7 @@ public class CellularAutomaton {
           var elapsedMillis = (System.currentTimeMillis() - millisBefore);
           try {
             // wait some milliseconds to synchronize animation
-            Thread.sleep(((int) (parameters.secondsPerTimeStep() * 1000) - elapsedMillis) / parameters.GUITimeFactor());
+            Thread.sleep(((int) (parameters.timePerTick() * 1000) - elapsedMillis) / parameters.GUITimeFactor());
             millisBefore = System.currentTimeMillis();
           } catch (Exception ignored) {
           }
@@ -410,7 +430,7 @@ public class CellularAutomaton {
     int i = 0;
     for (var pedestrian : outOfScenarioPedestrians) {
       steps[i] = pedestrian.getNumberOfSteps();
-      evacuationTimes[i] = pedestrian.getExitTimeSteps() * parameters.secondsPerTimeStep();
+      evacuationTimes[i] = pedestrian.getExitTimeSteps() * parameters.timePerTick();
       i += 1;
     }
     double meanSteps = Descriptive.mean(steps);
