@@ -145,16 +145,7 @@ public class CellularAutomaton {
    * @param parameters          parameters describing new pedestrians.
    */
   public void addPedestriansUniformly(int numberOfPedestrians, PedestrianParameters parameters) {
-    assert numberOfPedestrians >= 0 : "addPedestriansUniformly: number of pedestrian cannot be negative";
-    var numberOfPedestriansPlaced = 0;
-    while (numberOfPedestriansPlaced < numberOfPedestrians) {
-      var row = random.nextInt(getRows());
-      var column = random.nextInt(getColumns());
-
-      if (addPedestrian(row, column, parameters)) {
-        numberOfPedestriansPlaced++;
-      }
-    }
+    addPedestriansUniformly(numberOfPedestrians, () -> parameters);
   }
 
   /**
@@ -318,7 +309,10 @@ public class CellularAutomaton {
                 }
               },
               // no new location to consider. Don't move
-              () -> occupiedNextState[row][column] = true
+              () -> {
+                occupiedNextState[row][column] = true;
+                pedestrian.dontMove();
+              }
           );
         }
       }
