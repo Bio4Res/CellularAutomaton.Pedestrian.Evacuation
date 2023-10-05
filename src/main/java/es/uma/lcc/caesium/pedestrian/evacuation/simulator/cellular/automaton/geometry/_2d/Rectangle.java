@@ -56,7 +56,7 @@ public record Rectangle(int bottom, int left, int height, int width) {
     return that.bottom >= this.bottom && that.top() <= this.top() && that.left >= this.left && that.right() <= this.right();
   }
 
-  private int distance(int x1, int y1, int x2, int y2) {
+  private int _manhattanDistance(int x1, int y1, int x2, int y2) {
     return Math.abs(x1 - x2) + Math.abs(y1 - y2);
   }
 
@@ -67,16 +67,16 @@ public record Rectangle(int bottom, int left, int height, int width) {
     var atTop = this.top() < row;
 
     if (atTop && atLeft) {
-      return distance(this.left, this.top(), column, row);
+      return _manhattanDistance(this.left, this.top(), column, row);
     }
     if (atLeft && atBottom) {
-      return distance(this.left, this.bottom, column, row);
+      return _manhattanDistance(this.left, this.bottom, column, row);
     }
     if (atBottom && atRight) {
-      return distance(this.right(), this.bottom, column, row);
+      return _manhattanDistance(this.right(), this.bottom, column, row);
     }
     if (atRight && atTop) {
-      return distance(this.right(), this.top(), column, row);
+      return _manhattanDistance(this.right(), this.top(), column, row);
     }
     if (atLeft) {
       return this.left - column;
@@ -104,5 +104,19 @@ public record Rectangle(int bottom, int left, int height, int width) {
     graphics2D.fillRect(left(), bottom(), width(), height());
     graphics2D.setColor(outlineColor);
     graphics2D.drawRect(left(), bottom(), width(), height());
+  }
+
+  public int distanceSqr(int row, int column) {
+    var dh = Math.max(left() - column, Math.max(0, column - right()));
+    var dv = Math.max(bottom() - row, Math.max(0, row - top()));
+    return dh*dh + dv*dv;
+  }
+
+  public double distance(int row, int column) {
+    return Math.sqrt(distanceSqr(row, column));
+  }
+
+  public double distance(Location location) {
+    return distance(location.row(), location.column());
   }
 }

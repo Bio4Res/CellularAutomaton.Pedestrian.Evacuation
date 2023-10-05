@@ -412,27 +412,84 @@ public class CellularAutomaton {
   }
 
   /**
+   * Returns number of evacuees (number of pedestrians that have evacuated scenario).
+   *
+   * @return number of evacuees.
+   */
+  public int numberOfEvacuees() {
+    return outOfScenarioPedestrians.size();
+  }
+
+  /**
+   * Returns number of non evacuees (number of pedestrians still inside scenario).
+   *
+   * @return number of non evacuees.
+   */
+  public int numberOfNonEvacuees() {
+    return inScenarioPedestrians.size();
+  }
+
+  /**
+   * Returns evacuation times for evacuees.
+   * @return evacuation times for evacuees.
+   */
+  public double[] evacuationTimes() {
+    int numberOfEvacuees = numberOfEvacuees();
+    double[] times = new double[numberOfEvacuees];
+
+    int i = 0;
+    for (var evacuee : outOfScenarioPedestrians) {
+      times[i] = evacuee.getExitTimeSteps() * parameters.timePerTick();
+      i += 1;
+    }
+
+    return times;
+  }
+
+  /**
+   * Returns distances to closest exit for each non evacuee.
+   *
+   * @return distances to closest exit for each non evacuee.
+   */
+  public double[] distancesToClosestExit() {
+    int numberOfNonEvacuees = numberOfNonEvacuees();
+    double[] shortestDistances = new double[numberOfNonEvacuees];
+
+    int i = 0;
+    for (var nonEvacuee : inScenarioPedestrians) {
+      var shortestDistance = Double.MAX_VALUE;
+      for(var exit : getScenario().exits()) {
+        var distance = exit.distance(nonEvacuee.getLocation());
+        if (distance < shortestDistance)
+          shortestDistance = distance;
+      }
+      shortestDistances[i] = shortestDistance * getScenario().getCellDimension();
+      i += 1;
+    }
+
+    return shortestDistances;
+  }
+
+  /**
    * Computes some statistics regarding the execution of the simulation.
    *
    * @return statistics collected after running simulation.
    */
   public Statistics computeStatistics() {
-    int numberOfPedestrians = outOfScenarioPedestrians.size();
-    int[] steps = new int[numberOfPedestrians];
-    double[] evacuationTimes = new double[numberOfPedestrians];
+    int numberOfEvacuees = numberOfEvacuees();
+    double[] evacuationTimes = evacuationTimes();
+    int[] steps = new int[numberOfEvacuees];
 
     int i = 0;
     for (var pedestrian : outOfScenarioPedestrians) {
       steps[i] = pedestrian.getNumberOfSteps();
-      evacuationTimes[i] = pedestrian.getExitTimeSteps() * parameters.timePerTick();
       i += 1;
     }
     double meanSteps = Descriptive.mean(steps);
     double meanEvacuationTime = Descriptive.mean(evacuationTimes);
     double medianSteps = Descriptive.median(steps);
     double medianEvacuationTime = Descriptive.median(evacuationTimes);
-    int numberOfEvacuees = outOfScenarioPedestrians.size();
-    int numberOfNonEvacuees = inScenarioPedestrians.size();
+    int numberOfNonEvacuees = numberOfNonEvacuees();
 
     return new Statistics(meanSteps, meanEvacuationTime
         , medianSteps, medianEvacuationTime
