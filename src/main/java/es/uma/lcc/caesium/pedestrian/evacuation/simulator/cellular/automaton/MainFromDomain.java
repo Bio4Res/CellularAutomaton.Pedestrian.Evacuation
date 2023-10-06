@@ -17,7 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-import static es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.statistics.Random.random;
+import static es.uma.lcc.caesium.statistics.Random.random;
 
 /**
  * Main simulation class.

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 
-import static es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.statistics.Random.random;
+import static es.uma.lcc.caesium.statistics.Random.random;
 
 /**
  * A pedestrian in the simulation.

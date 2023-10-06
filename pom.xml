@@ -22,6 +22,11 @@
         </dependency>
         <dependency>
             <groupId>es.uma.lcc.caesium</groupId>
+            <artifactId>statistics</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>es.uma.lcc.caesium</groupId>
             <artifactId>pedestrian-evacuation-simulator-environment</artifactId>
             <version>1.0.0</version>
         </dependency>
