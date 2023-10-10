@@ -5,7 +5,7 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 
 /**
  * Class for representing a static floor field proportional to the shortest distance of each cell to its closest
- * exit. Uses Moore's neighbourhood among cells in grid in order to find shortest paths to exits.
+ * exit. Uses Moore's neighbourhood among cells in grid in order to find the shortest paths to exits.
  *
  * @author Pepe Gallardo
  */

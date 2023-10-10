@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 /**
  * Class for representing a static floor field proportional to the shortest distance of each cell to its closest
- * exit. Neighbourhood relationship among cells in grid used to find shortest paths can be specified.
+ * exit. Neighbourhood relationship among cells in grid used to find the shortest paths can be specified.
  *
  * @author Pepe Gallardo
  */
@@ -32,7 +32,7 @@ public class DijkstraStaticFloorField extends StaticFloorField {
       }
     }
 
-    // Compute shortest distances to any exit from each node
+    // Compute the shortest distances to any exit from each node
     var priorityQueue = new PriorityQueue<Node>();
 
     // Initially distance to any exit is 0 and to any other non-blocked cell is Infinity

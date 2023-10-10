@@ -301,7 +301,7 @@ public class CellularAutomaton {
                 if (willBeOccupied(location)) {
                   // new location already taken by another pedestrian. Don't move
                   occupiedNextState[row][column] = true;
-                  pedestrian.dontMove();
+                  pedestrian.doNotMove();
                 } else {
                   // move to new location
                   occupiedNextState[location.row()][location.column()] = true;
@@ -311,7 +311,7 @@ public class CellularAutomaton {
               // no new location to consider. Don't move
               () -> {
                 occupiedNextState[row][column] = true;
-                pedestrian.dontMove();
+                pedestrian.doNotMove();
               }
           );
         }
@@ -447,7 +447,7 @@ public class CellularAutomaton {
   }
 
   /**
-   * Returns distances to closest exit for each non evacuee.
+   * Returns distances to the closest exit for each non evacuee.
    *
    * @return distances to closest exit for each non evacuee.
    */

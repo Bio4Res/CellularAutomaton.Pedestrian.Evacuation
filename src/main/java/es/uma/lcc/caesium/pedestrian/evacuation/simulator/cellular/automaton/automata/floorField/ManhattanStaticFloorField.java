@@ -17,7 +17,7 @@ public class ManhattanStaticFloorField extends StaticFloorField {
   }
 
   public void initialize() {
-    // For each cell compute Manhattan distance to closest exit
+    // For each cell compute Manhattan distance to the closest exit
     var maxDistance = Double.MIN_VALUE;
     for (int i = 0; i < getRows(); i++) {
       for (int j = 0; j < getColumns(); j++) {

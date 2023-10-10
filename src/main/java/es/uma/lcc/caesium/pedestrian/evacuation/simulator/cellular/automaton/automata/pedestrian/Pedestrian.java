@@ -167,7 +167,7 @@ public class Pedestrian {
   /**
    * Make the pedestrian to stay in its current cell.
    */
-  public void dontMove() {
+  public void doNotMove() {
     this.path.add(new Location(row, column));
   }
 
