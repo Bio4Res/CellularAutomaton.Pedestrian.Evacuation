@@ -13,9 +13,8 @@ import java.util.function.Consumer;
 public abstract class Canvas extends JLabel {
   private final int height, width;
   private final Color backgroundColor;
-  private final BufferedImage offScreenBufferedImage, onScreenBufferedImage;
+  private final BufferedImage offScreenBufferedImage;
   private final Graphics2D offScreenGraphics2D, onScreenGraphics2D;
-  private final ImageIcon imageIcon;
 
   public Canvas(int rows, int columns, int pixelsPerCell, Color backgroundColor) {
     super();
@@ -27,7 +26,7 @@ public abstract class Canvas extends JLabel {
     setPreferredSize(new Dimension(width, height));
 
     this.offScreenBufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-    this.onScreenBufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage onScreenBufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     this.offScreenGraphics2D = offScreenBufferedImage.createGraphics();
     this.onScreenGraphics2D = onScreenBufferedImage.createGraphics();
 
@@ -41,7 +40,7 @@ public abstract class Canvas extends JLabel {
     offScreenGraphics2D.translate(0, getHeight());
     offScreenGraphics2D.scale(pixelsPerCell, -pixelsPerCell);
 
-    this.imageIcon = new ImageIcon(onScreenBufferedImage);
+    ImageIcon imageIcon = new ImageIcon(onScreenBufferedImage);
     setIcon(imageIcon);
   }
 

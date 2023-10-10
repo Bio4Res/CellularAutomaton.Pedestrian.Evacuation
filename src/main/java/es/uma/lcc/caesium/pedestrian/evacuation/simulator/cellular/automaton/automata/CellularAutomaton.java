@@ -386,7 +386,7 @@ public class CellularAutomaton {
               .paint(CellularAutomaton.this::paint)
               .build();
 
-      var frame = new Frame(canvas);
+      new Frame(canvas);
     }
     var thread = new RunThread(canvas);
     thread.start();
