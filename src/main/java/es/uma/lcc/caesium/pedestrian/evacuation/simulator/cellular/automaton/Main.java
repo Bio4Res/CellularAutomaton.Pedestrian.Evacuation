@@ -58,7 +58,7 @@ class Main {
     try (FileWriter fileWriter = new FileWriter(fileName)) {
       fileWriter.write(Jsoner.prettyPrint(jsonTrace.toJson()));
       fileWriter.flush();
-      System.out.println(String.format("Trace written to file %s successfully.", fileName));
+      System.out.printf("Trace written to file %s successfully.%n", fileName);
     } catch (IOException e) {
       e.printStackTrace();
     }
