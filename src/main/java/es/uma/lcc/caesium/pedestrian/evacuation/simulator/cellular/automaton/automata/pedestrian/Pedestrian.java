@@ -205,7 +205,7 @@ public class Pedestrian {
    *
    * @return List of tentative movements that this pedestrian can make, each one with associate desirability.
    */
-  public List<TentativeMovement> computeTransitionDesirabilities() {
+  private List<TentativeMovement> computeTransitionDesirabilities() {
     var scenario = automaton.getScenario();
     var neighbours = automaton.neighbours(row, column);
 
