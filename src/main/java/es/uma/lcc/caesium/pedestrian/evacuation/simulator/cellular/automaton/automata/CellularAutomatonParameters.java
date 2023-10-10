@@ -81,7 +81,7 @@ public record CellularAutomatonParameters(
     /**
      * @param timePerTick Seconds of time elapsed for each tick of simulation.
      *                       Notice that definition of this parameter also implies
-     *                       a redefinition of {@link BuilderWithScenarioWithTimeLimit#pedestrianVelocity(double)}
+     *                       a redefinition of {@link BuilderWithScenarioWithTimeLimit#pedestrianReferenceVelocity(double)}
      *                       in accordance with scenario's cell dimensions.
      */
     public BuilderWithScenarioWithTimeLimit timePerTick(double timePerTick) {
@@ -90,13 +90,13 @@ public record CellularAutomatonParameters(
     }
 
     /**
-     * @param pedestrianVelocity Maximum pedestrian velocity in meters per second.
+     * @param pedestrianReferenceVelocity Maximum pedestrian velocity in meters per second.
      *                       Notice that definition of this parameter also implies
      *                       a redefinition of {@link BuilderWithScenarioWithTimeLimit#timePerTick(double)}
      *                       in accordance with scenario's cell dimensions.
      */
-    public BuilderWithScenarioWithTimeLimit pedestrianVelocity(double pedestrianVelocity) {
-      this.timePerTick = pedestrianVelocity * scenario.getCellDimension();
+    public BuilderWithScenarioWithTimeLimit pedestrianReferenceVelocity(double pedestrianReferenceVelocity) {
+      this.timePerTick = pedestrianReferenceVelocity * scenario.getCellDimension();
       return this;
     }
 
