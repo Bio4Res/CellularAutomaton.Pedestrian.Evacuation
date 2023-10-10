@@ -198,6 +198,12 @@ public class Pedestrian {
     return exitTimeSteps;
   }
 
+
+  /**
+   * Minimum desirability of a cell so that it is never 0.
+   */
+  private static final double DESIRABILITY_EPSILON = 0.00001;
+
   /**
    * Computes transition desirabilities for reachable cells in the neighbourhood on this pedestrian. (the higher the
    * desirability the higher the willingness to move to such location). We do not use the term probability because
@@ -226,7 +232,7 @@ public class Pedestrian {
           // all neighbours of new cell are occupied or blocked
           attraction = attraction / parameters.crowdRepulsion();
         }
-        var desirability = Math.exp(parameters.fieldAttractionBias() * attraction);
+        var desirability = DESIRABILITY_EPSILON + Math.exp(parameters.fieldAttractionBias() * attraction);
         movements.add(new TentativeMovement(neighbour, desirability));
       }
     }
