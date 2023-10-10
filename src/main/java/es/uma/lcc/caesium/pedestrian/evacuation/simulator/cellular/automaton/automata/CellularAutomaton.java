@@ -73,19 +73,29 @@ public class CellularAutomaton {
     this.scenario = parameters.scenario();
     this.neighbourhood = parameters.neighbourhood();
     this.occupied = new boolean[scenario.getRows()][scenario.getColumns()];
-    clearCells(occupied);
     this.occupiedNextState = new boolean[scenario.getRows()][scenario.getColumns()];
     this.pedestrianFactory = new PedestrianFactory(this);
 
     this.inScenarioPedestrians = Collections.synchronizedList(new ArrayList<>());
     this.outOfScenarioPedestrians = new ArrayList<>();
-    this.timeSteps = 0;
+    reset();
   }
 
   private void clearCells(boolean[][] cells) {
     for (var row : cells) {
       Arrays.fill(row, false);
     }
+  }
+
+  /**
+   * Resets state of automaton. All pedestrians are removed, cells became non-occupied
+   * and elapsed time steps are set to 0.
+   */
+  public void reset() {
+    clearCells(occupied);
+    inScenarioPedestrians.clear();
+    outOfScenarioPedestrians.clear();
+    timeSteps = 0;
   }
 
   /**
