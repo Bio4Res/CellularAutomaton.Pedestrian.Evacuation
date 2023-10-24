@@ -218,21 +218,17 @@ public class Pedestrian {
     var movements = new ArrayList<TentativeMovement>(neighbours.size());
     for (var neighbour : neighbours) {
       if (automaton.isCellReachable(neighbour)) {
-        double attraction = scenario.getStaticFloorField().getField(neighbour);
-
         // count reachable cells around new location
         var numberOfReachableCellsAround = 0;
         for (var around : automaton.neighbours(neighbour)) {
           if (automaton.isCellReachable(around)) {
             numberOfReachableCellsAround++;
-            break;
           }
         }
-        if (numberOfReachableCellsAround == 0) {
-          // all neighbours of new cell are occupied or blocked
-          attraction = attraction / parameters.crowdRepulsion();
-        }
-        var desirability = DESIRABILITY_EPSILON + Math.exp(parameters.fieldAttractionBias() * attraction);
+
+        var attraction = parameters.fieldAttractionBias() * scenario.getStaticFloorField().getField(neighbour);
+        var repulsion = parameters.crowdRepulsion() / (1 + numberOfReachableCellsAround);
+        var desirability = DESIRABILITY_EPSILON + Math.exp(attraction) / Math.exp(repulsion);
         movements.add(new TentativeMovement(neighbour, desirability));
       }
     }
