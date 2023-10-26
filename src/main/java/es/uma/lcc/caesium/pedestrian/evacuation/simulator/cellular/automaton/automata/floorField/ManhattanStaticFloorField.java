@@ -37,7 +37,7 @@ public class ManhattanStaticFloorField extends StaticFloorField {
     // Normalize so that the closer to an exit the larger the static field
     for (int i = 0; i < getRows(); i++) {
       for (int j = 0; j < getColumns(); j++) {
-        staticFloorField[i][j] = maxDistance - staticFloorField[i][j];
+        staticFloorField[i][j] = 1 - staticFloorField[i][j] / maxDistance;
       }
     }
   }

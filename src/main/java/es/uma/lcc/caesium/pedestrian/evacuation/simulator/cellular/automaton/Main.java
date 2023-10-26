@@ -40,8 +40,8 @@ class Main {
     // place pedestrians
     Supplier<PedestrianParameters> pedestrianParametersSupplier = () ->
         new PedestrianParameters.Builder()
-            .fieldAttractionBias(random.nextDouble(1.5, 2.0))
-            .crowdRepulsion(random.nextDouble(1.00, 1.50))
+            .fieldAttractionBias(100)
+            .crowdRepulsion(25)
             .velocityPercent(random.nextDouble(0.3, 1.0))
             .build();
 

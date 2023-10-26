@@ -82,7 +82,7 @@ public class DijkstraStaticFloorField extends StaticFloorField {
     for (int i = 0; i < getRows(); i++) {
       for (int j = 0; j < getColumns(); j++) {
         if (!scenario.isBlocked(i, j)) {
-          staticFloorField[i][j] = maxDistance - staticFloorField[i][j];
+          staticFloorField[i][j] = 1 - staticFloorField[i][j] / maxDistance;
         }
       }
     }

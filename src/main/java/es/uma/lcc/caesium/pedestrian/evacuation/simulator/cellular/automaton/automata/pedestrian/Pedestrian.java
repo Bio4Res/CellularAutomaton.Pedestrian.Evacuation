@@ -228,7 +228,7 @@ public class Pedestrian {
 
         var attraction = parameters.fieldAttractionBias() * scenario.getStaticFloorField().getField(neighbour);
         var repulsion = parameters.crowdRepulsion() / (1 + numberOfReachableCellsAround);
-        var desirability = DESIRABILITY_EPSILON + Math.exp(attraction) / Math.exp(repulsion);
+        var desirability = DESIRABILITY_EPSILON + Math.exp(attraction - repulsion);
         movements.add(new TentativeMovement(neighbour, desirability));
       }
     }
