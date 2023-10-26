@@ -62,7 +62,9 @@ public class DijkstraStaticFloorField extends StaticFloorField {
         // update if they improve current ones
         for (var neighbour : neighbourhood.neighbours(node.row, node.column)) {
           if (!scenario.isBlocked(neighbour)) {
-            var delta = Math.sqrt(Math.abs(neighbour.row() - node.row) + Math.abs(neighbour.column() - node.column));
+        	int rowdiff = neighbour.row() - node.row;
+        	int coldiff = neighbour.column() - node.column;
+            var delta = Math.sqrt(rowdiff*rowdiff + coldiff*coldiff);
             double newNeighbourDistance = nodeDistance + delta;
             if (newNeighbourDistance < staticFloorField[neighbour.row()][neighbour.column()]) {
               // Shorter distance to neighbour was found: update
