@@ -48,11 +48,11 @@ public class MainFromDomain {
 
     // place pedestrians
     Supplier<PedestrianParameters> pedestrianParametersSupplier = () ->
-        new PedestrianParameters.Builder()
-            .fieldAttractionBias(random.nextDouble(0.65, 2.0))
-            .crowdRepulsion(random.nextDouble(1.00, 1.50))
-            .velocityPercent(random.nextDouble(0.3, 1.0))
-            .build();
+      new PedestrianParameters.Builder()
+        .fieldAttractionBias(random.nextDouble(1.0, 10.0 ))
+        .crowdRepulsion(random.nextDouble(0.1, 0.5))
+        .velocityPercent(random.nextDouble(0.3, 1.0))
+        .build();
 
     var numberOfPedestrians = random.nextInt(150, 600);
     automaton.addPedestriansUniformly(numberOfPedestrians, pedestrianParametersSupplier);
