@@ -216,6 +216,7 @@ public class Pedestrian {
     var neighbours = automaton.neighbours(row, column);
 
     var movements = new ArrayList<TentativeMovement>(neighbours.size());
+    double minDesirability = Double.MAX_VALUE;
     for (var neighbour : neighbours) {
       if (automaton.isCellReachable(neighbour)) {
         // count reachable cells around new location
@@ -228,11 +229,17 @@ public class Pedestrian {
 
         var attraction = parameters.fieldAttractionBias() * scenario.getStaticFloorField().getField(neighbour);
         var repulsion = parameters.crowdRepulsion() / (1 + numberOfReachableCellsAround);
-        var desirability = DESIRABILITY_EPSILON + Math.exp(attraction - repulsion);
+        var desirability = Math.exp(attraction - repulsion);
         movements.add(new TentativeMovement(neighbour, desirability));
+        if (desirability < minDesirability)
+        	minDesirability = desirability;
       }
     }
-    return movements;
+    var gradientMovements = new ArrayList<TentativeMovement>(neighbours.size());
+    for (TentativeMovement m: movements)
+    	gradientMovements.add(new TentativeMovement(m.location(), DESIRABILITY_EPSILON + m.desirability()-minDesirability));
+
+    return gradientMovements;
   }
 
   /**
