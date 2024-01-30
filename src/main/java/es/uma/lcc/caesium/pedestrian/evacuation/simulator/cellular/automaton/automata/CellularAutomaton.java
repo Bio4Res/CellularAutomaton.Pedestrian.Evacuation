@@ -126,7 +126,7 @@ public class CellularAutomaton {
    */
   public boolean addPedestrian(int row, int column, PedestrianParameters parameters) {
     assert row >= 0 && row < getRows() : "addPedestrian: invalid row";
-    assert column >= 0 && row < getColumns() : "addPedestrian: invalid column";
+    assert column >= 0 && column < getColumns() : "addPedestrian: invalid column";
     if (isCellReachable(row, column)) {
       var pedestrian = pedestrianFactory.getInstance(row, column, parameters);
       occupied[row][column] = true;
@@ -186,7 +186,7 @@ public class CellularAutomaton {
    */
   public List<Location> neighbours(int row, int column) {
     assert row >= 0 && row < getRows() : "neighbours: invalid row";
-    assert column >= 0 && row < getColumns() : "neighbours: invalid column";
+    assert column >= 0 && column < getColumns() : "neighbours: invalid column";
     return neighbourhood.neighbours(row, column);
   }
 
@@ -209,7 +209,7 @@ public class CellularAutomaton {
    */
   public boolean isCellOccupied(int row, int column) {
     assert row >= 0 && row < getRows() : "isCellOccupied: invalid row";
-    assert column >= 0 && row < getColumns() : "isCellOccupied: invalid column";
+    assert column >= 0 && column < getColumns() : "isCellOccupied: invalid column";
     return occupied[row][column];
   }
 
@@ -233,7 +233,7 @@ public class CellularAutomaton {
    */
   public boolean isCellReachable(int row, int column) {
     assert row >= 0 && row < getRows() : "isCellReachable: invalid row";
-    assert column >= 0 && row < getColumns() : "isCellReachable: invalid column";
+    assert column >= 0 && column < getColumns() : "isCellReachable: invalid column";
     return !occupied[row][column] && !scenario.isBlocked(row, column);
   }
 
@@ -258,7 +258,7 @@ public class CellularAutomaton {
    */
   public boolean willBeOccupied(int row, int column) {
     assert row >= 0 && row < getRows() : "willBeOccupied: invalid row";
-    assert column >= 0 && row < getColumns() : "willBeOccupied: invalid column";
+    assert column >= 0 && column < getColumns() : "willBeOccupied: invalid column";
     return occupiedNextState[row][column];
   }
 
