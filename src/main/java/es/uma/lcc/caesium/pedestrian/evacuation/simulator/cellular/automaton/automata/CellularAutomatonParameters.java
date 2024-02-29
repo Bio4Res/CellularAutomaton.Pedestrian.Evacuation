@@ -96,7 +96,7 @@ public record CellularAutomatonParameters(
      *                       in accordance with scenario's cell dimensions.
      */
     public BuilderWithScenarioWithTimeLimit pedestrianReferenceVelocity(double pedestrianReferenceVelocity) {
-      this.timePerTick = pedestrianReferenceVelocity * scenario.getCellDimension();
+      this.timePerTick = scenario.getCellDimension() / pedestrianReferenceVelocity;
       return this;
     }
 
