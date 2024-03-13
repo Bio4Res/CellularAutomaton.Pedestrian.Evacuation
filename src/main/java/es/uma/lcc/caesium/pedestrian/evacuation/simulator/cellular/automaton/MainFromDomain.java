@@ -25,7 +25,7 @@ import static es.uma.lcc.caesium.statistics.Random.random;
  * @author Pepe Gallardo
  */
 public class MainFromDomain {
-  public static void main(String[] args) throws FileNotFoundException, JsonException {
+  public static void main(String[] args) throws IOException, JsonException {
     String filename = (args.length == 0) ? "data/environments/environment-example-supermarket.json" : args[0];
     Environment environment = Environment.fromFile(filename);
     Domain domain = environment.getDomain(1);
