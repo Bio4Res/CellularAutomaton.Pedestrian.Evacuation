@@ -554,7 +554,7 @@ public class CellularAutomaton {
    * @return Json representing traces of all pedestrians through the scenario.
    */
   public JsonObject jsonTrace() {
-    var domain = 0; // todo currently there is only a single domain
+    var domain = 1; // todo currently there is only a single domain
 
     // Create an empty JsonArray for the snapshots
     JsonArray snapshots = new JsonArray();
