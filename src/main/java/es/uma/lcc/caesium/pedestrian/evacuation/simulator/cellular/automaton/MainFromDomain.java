@@ -12,7 +12,6 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Domain;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.environment.Environment;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -62,10 +61,10 @@ public class MainFromDomain {
     System.out.println(statistics);
 
     // write trace to json file
-    var jsonTrace = automaton.jsonTrace();
+    var trace = automaton.getTrace();
     String fileName = "data/traces/trace.json";
     try (FileWriter fileWriter = new FileWriter(fileName)) {
-      fileWriter.write(Jsoner.prettyPrint(jsonTrace.toJson()));
+      fileWriter.write(Jsoner.prettyPrint(trace.toJson().toJson()));
       fileWriter.flush();
       System.out.printf("Trace written to file %s successfully.%n", fileName);
     } catch (IOException e) {

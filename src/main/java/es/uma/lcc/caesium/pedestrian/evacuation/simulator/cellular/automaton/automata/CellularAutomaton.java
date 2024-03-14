@@ -1,7 +1,5 @@
 package es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.neighbourhood.Neighbourhood;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.pedestrian.Pedestrian;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.automata.pedestrian.PedestrianFactory;
@@ -10,6 +8,9 @@ import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.aut
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.geometry._2d.Location;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Canvas;
 import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.gui.Frame;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Coordinates;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Snapshot;
+import es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Trace;
 import es.uma.lcc.caesium.statistics.Descriptive;
 
 import java.awt.*;
@@ -524,40 +525,15 @@ public class CellularAutomaton {
     }
   }
 
-  private static JsonObject jsonPedestrian(int id, int domain, int row, int column) {
-    JsonObject pedestrian = new JsonObject();
-    pedestrian.put("id", id);
-
-    JsonObject location = new JsonObject();
-    location.put("domain", domain);
-
-    JsonObject coordinates = new JsonObject();
-    coordinates.put("X", column);
-    coordinates.put("Y", row);
-
-    location.put("coordinates", coordinates);
-    pedestrian.put("location", location);
-
-    return pedestrian;
-  }
-
-  private static JsonObject jsonSnapshot(double timestamp, JsonArray crowd) {
-    JsonObject snapshot = new JsonObject();
-    snapshot.put("timestamp", timestamp);
-    snapshot.put("crowd", crowd);
-    return snapshot;
-  }
-
   /**
-   * Json representing traces of all pedestrians through the scenario.
+   * Trace of all pedestrians through the scenario.
    *
-   * @return Json representing traces of all pedestrians through the scenario.
+   * @return Trace of all pedestrians through the scenario.
    */
-  public JsonObject jsonTrace() {
+  public Trace getTrace() {
     var domain = 1; // todo currently there is only a single domain
 
-    // Create an empty JsonArray for the snapshots
-    JsonArray snapshots = new JsonArray();
+    var snapshots = new Snapshot[timeSteps];
 
     List<Pedestrian> allPedestrians = new ArrayList<>();
     allPedestrians.addAll(inScenarioPedestrians);
@@ -566,25 +542,30 @@ public class CellularAutomaton {
 
     // Create snapshots
     for (int t = 0; t < timeSteps; t++) {
-      JsonArray crowd = new JsonArray();
-      for (var pedestrian : allPedestrians) {
-        var path = pedestrian.getPath();
-        if (path.size() > t) {
-          var location = path.get(t);
-          crowd.add(jsonPedestrian(pedestrian.getIdentifier()
-              , domain
-              , location.row()
-              , location.column()));
-        }
-      }
-      snapshots.add(jsonSnapshot(t, crowd));
+      var crowd = getPedestrians(allPedestrians, t, domain);
+      snapshots[t] = new Snapshot(t, crowd);
     }
 
-    // Create the final JsonObject with the snapshots array
-    JsonObject result = new JsonObject();
-    result.put("snapshots", snapshots);
+    return new Trace(scenario.getCellDimension(), snapshots);
+  }
 
-    return result;
+  private es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Pedestrian[] getPedestrians(List<Pedestrian> allPedestrians, int t, int domain) {
+    var crowd = new ArrayList<es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Pedestrian>();
+
+    var cellDimension = scenario.getCellDimension();
+    for (var pedestrian : allPedestrians) {
+      var path = pedestrian.getPath();
+      if (path.size() > t) {
+        var location = path.get(t);
+        crowd.add(new es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Pedestrian(
+            pedestrian.getIdentifier()
+            , new es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Location(
+                domain
+                , new Coordinates(location.column() * cellDimension + cellDimension / 2
+                    , location.row() * cellDimension + cellDimension / 2))));
+      }
+    }
+    return crowd.toArray(new es.uma.lcc.caesium.pedestrian.evacuation.simulator.cellular.automaton.trace.Pedestrian[0]);
   }
 }
 

@@ -53,10 +53,10 @@ class Main {
     System.out.println(statistics);
 
     // write trace to json file
-    var jsonTrace = automaton.jsonTrace();
+    var trace = automaton.getTrace();
     String fileName = "data/traces/trace.json";
     try (FileWriter fileWriter = new FileWriter(fileName)) {
-      fileWriter.write(Jsoner.prettyPrint(jsonTrace.toJson()));
+      fileWriter.write(Jsoner.prettyPrint(trace.toJson().toJson()));
       fileWriter.flush();
       System.out.printf("Trace written to file %s successfully.%n", fileName);
     } catch (IOException e) {
